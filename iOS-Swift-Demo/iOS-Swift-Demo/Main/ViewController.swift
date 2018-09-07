@@ -26,9 +26,10 @@ class ViewController: BaseViewController {
     }
     
     override func dataInitialization() {
-        nameArray = [["wee","123213"]]
-        dateArray = ["2018-09-07"]
-        controllerArray = [[ViewController() ,BaseViewController()]]
+        nameArray = [["Demo名称"]]
+        dateArray = ["时间：如2018-09-07"]
+        /// 初始化好的控制器
+        controllerArray = [[TempletViewController()]]
     }
     
     override func setupSubViewsPropertys() {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48113A1721425B8E0081B6A0 /* TempletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A1621425B8E0081B6A0 /* TempletViewController.swift */; };
 		486854672142461C002981BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486854662142461C002981BA /* AppDelegate.swift */; };
 		486854692142461C002981BA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486854682142461C002981BA /* ViewController.swift */; };
 		4868546C2142461C002981BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4868546A2142461C002981BA /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		48113A1621425B8E0081B6A0 /* TempletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempletViewController.swift; sourceTree = "<group>"; };
 		486854632142461C002981BA /* iOS-Swift-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-Swift-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		486854662142461C002981BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		486854682142461C002981BA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -37,6 +39,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		48113A1821425B960081B6A0 /* (示例)2018-09-07 */ = {
+			isa = PBXGroup;
+			children = (
+				48113A1621425B8E0081B6A0 /* TempletViewController.swift */,
+			);
+			path = "(示例)2018-09-07";
+			sourceTree = "<group>";
+		};
 		4868545A2142461B002981BA = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				486854662142461C002981BA /* AppDelegate.swift */,
+				48113A1821425B960081B6A0 /* (示例)2018-09-07 */,
 				4868547A21424A6F002981BA /* BaseController */,
 				4868547C21424AA0002981BA /* Main */,
 				4868547B21424A8D002981BA /* Recourse */,
@@ -162,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48113A1721425B8E0081B6A0 /* TempletViewController.swift in Sources */,
 				486854692142461C002981BA /* ViewController.swift in Sources */,
 				486854672142461C002981BA /* AppDelegate.swift in Sources */,
 				4868547921424642002981BA /* BaseViewController.swift in Sources */,
