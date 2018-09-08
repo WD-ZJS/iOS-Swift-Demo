@@ -20,7 +20,6 @@ class WDSegemenViewController: BaseViewController, WDSegemenViewDelegate, WDSege
         self.view.addSubview(segmentView)
     }
     
-    
     func segmentViewClickAtIndex(index: Int) {
         print(index)
     }
