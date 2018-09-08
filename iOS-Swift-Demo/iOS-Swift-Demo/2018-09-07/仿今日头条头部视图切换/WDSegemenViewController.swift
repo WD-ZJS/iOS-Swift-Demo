@@ -29,11 +29,10 @@ class WDSegemenViewController: BaseViewController, WDSegemenViewDelegate, WDSege
     }
     
     func controllerOfSegementView() -> Array<UIViewController> {
-        var array:Array<UIViewController>?
-        for _ in 0...6 {
-            array?.append(WDSegmentTestViewController())
-            print(array as Any)
+        var array:Array<UIViewController> = Array()
+        for _ in 0...5 {
+            array.append(WDSegmentTestViewController())
         }
-        return array!
+        return array
     }
 }

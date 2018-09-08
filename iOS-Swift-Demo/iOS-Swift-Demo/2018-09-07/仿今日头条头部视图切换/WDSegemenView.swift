@@ -23,32 +23,31 @@ public protocol WDSegemenViewDelegate:NSObjectProtocol {
 
 class WDSegemenView: UIView {
    
-    weak var dataSource:WDSegemenViewDataSource?
-    
-    private var titleArray:Array<String>?
-    private var controllerArray:Array<UIViewController>?
-
-    public var delegete:WDSegemenViewDelegate? {
-        
+    weak var dataSource:WDSegemenViewDataSource? {
         didSet {
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.titleArrayOfSegmentView)))! {
                 titleArray = self.dataSource?.titleArrayOfSegmentView()
             } else {
                 titleArray = nil
             }
-
+            
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.controllerOfSegementView)))! {
                 controllerArray = self.dataSource?.controllerOfSegementView()
             } else {
                 controllerArray = nil
             }
-
+            
             if titleArray?.count != controllerArray?.count {
                 print("控制器数量和标题数量不一致")
                 return
             }
         }
     }
+    
+    private var titleArray:Array<String>?
+    private var controllerArray:Array<UIViewController>?
+
+    public var delegete:WDSegemenViewDelegate?
     
     
     private lazy var collectionLayout:UICollectionViewFlowLayout = {
