@@ -26,10 +26,10 @@ class ViewController: BaseViewController {
     }
     
     override func dataInitialization() {
-        nameArray = [["Demo名称"], ["仿微信底部弹窗"]]
+        nameArray = [["Demo名称"], ["仿微信底部弹窗", "仿今日头条头部视图切换"]]
         dateArray = ["时间：如2018-09-07", "2018-09-07"]
         /// 初始化好的控制器
-        controllerArray = [[TempletViewController()],[WDBottmSheetViewController()]]
+        controllerArray = [[TempletViewController()],[WDBottmSheetViewController(),WDSegemenViewController()]]
     }
     
     override func setupSubViewsPropertys() {

@@ -10,18 +10,23 @@
 		48113A1721425B8E0081B6A0 /* TempletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A1621425B8E0081B6A0 /* TempletViewController.swift */; };
 		48113A1B214265980081B6A0 /* WDBottmSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A1A214265980081B6A0 /* WDBottmSheetViewController.swift */; };
 		48113A1D214265AB0081B6A0 /* WDBottmActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A1C214265AB0081B6A0 /* WDBottmActionSheet.swift */; };
+		48113A2121426D620081B6A0 /* WDSegemenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A2021426D620081B6A0 /* WDSegemenView.swift */; };
+		48113A2421426DE50081B6A0 /* WDSegemenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48113A2321426DE50081B6A0 /* WDSegemenViewController.swift */; };
 		486854672142461C002981BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486854662142461C002981BA /* AppDelegate.swift */; };
 		486854692142461C002981BA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486854682142461C002981BA /* ViewController.swift */; };
 		4868546C2142461C002981BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4868546A2142461C002981BA /* Main.storyboard */; };
 		4868546E2142461F002981BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4868546D2142461F002981BA /* Assets.xcassets */; };
 		486854712142461F002981BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4868546F2142461F002981BA /* LaunchScreen.storyboard */; };
 		4868547921424642002981BA /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4868547821424642002981BA /* BaseViewController.swift */; };
+		48C3BC112143988B0093EA32 /* WDSegmentTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C3BC102143988B0093EA32 /* WDSegmentTestViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		48113A1621425B8E0081B6A0 /* TempletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempletViewController.swift; sourceTree = "<group>"; };
 		48113A1A214265980081B6A0 /* WDBottmSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WDBottmSheetViewController.swift; sourceTree = "<group>"; };
 		48113A1C214265AB0081B6A0 /* WDBottmActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WDBottmActionSheet.swift; sourceTree = "<group>"; };
+		48113A2021426D620081B6A0 /* WDSegemenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WDSegemenView.swift; sourceTree = "<group>"; };
+		48113A2321426DE50081B6A0 /* WDSegemenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WDSegemenViewController.swift; sourceTree = "<group>"; };
 		486854632142461C002981BA /* iOS-Swift-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-Swift-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		486854662142461C002981BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		486854682142461C002981BA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -30,6 +35,7 @@
 		486854702142461F002981BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		486854722142461F002981BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4868547821424642002981BA /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		48C3BC102143988B0093EA32 /* WDSegmentTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WDSegmentTestViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,9 +77,20 @@
 		48113A1F214267E90081B6A0 /* 2018-09-07 */ = {
 			isa = PBXGroup;
 			children = (
+				48113A2221426D660081B6A0 /* 仿今日头条头部视图切换 */,
 				48113A1E214267D90081B6A0 /* 仿微信底部弹窗 */,
 			);
 			path = "2018-09-07";
+			sourceTree = "<group>";
+		};
+		48113A2221426D660081B6A0 /* 仿今日头条头部视图切换 */ = {
+			isa = PBXGroup;
+			children = (
+				48113A2021426D620081B6A0 /* WDSegemenView.swift */,
+				48113A2321426DE50081B6A0 /* WDSegemenViewController.swift */,
+				48C3BC102143988B0093EA32 /* WDSegmentTestViewController.swift */,
+			);
+			path = "仿今日头条头部视图切换";
 			sourceTree = "<group>";
 		};
 		4868545A2142461B002981BA = {
@@ -96,8 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				486854662142461C002981BA /* AppDelegate.swift */,
-				48113A1F214267E90081B6A0 /* 2018-09-07 */,
 				48113A1821425B960081B6A0 /* (示例)2018-09-07 */,
+				48113A1F214267E90081B6A0 /* 2018-09-07 */,
 				4868547A21424A6F002981BA /* BaseController */,
 				4868547C21424AA0002981BA /* Main */,
 				4868547B21424A8D002981BA /* Recourse */,
@@ -206,8 +223,11 @@
 				48113A1721425B8E0081B6A0 /* TempletViewController.swift in Sources */,
 				486854692142461C002981BA /* ViewController.swift in Sources */,
 				486854672142461C002981BA /* AppDelegate.swift in Sources */,
+				48C3BC112143988B0093EA32 /* WDSegmentTestViewController.swift in Sources */,
 				48113A1B214265980081B6A0 /* WDBottmSheetViewController.swift in Sources */,
+				48113A2121426D620081B6A0 /* WDSegemenView.swift in Sources */,
 				4868547921424642002981BA /* BaseViewController.swift in Sources */,
+				48113A2421426DE50081B6A0 /* WDSegemenViewController.swift in Sources */,
 				48113A1D214265AB0081B6A0 /* WDBottmActionSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

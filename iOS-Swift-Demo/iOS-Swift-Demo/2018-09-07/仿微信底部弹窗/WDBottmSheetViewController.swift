@@ -17,9 +17,8 @@ class WDBottmSheetViewController: BaseViewController {
         super.viewDidLoad()
     }
     
-    // MARK: ============ 第二步 重写四个方法 ============
     override func dataInitialization() {
-        /// 初始化字符串、数组、字典等数据
+        
     }
     
     override func setupNavagationBar() {
@@ -43,7 +42,6 @@ class WDBottmSheetViewController: BaseViewController {
     }
     
     override func setupSubViewsConstraints() {
-        /// 对页面进行布局<推荐使用AutoLayout，不使用Frame布局>
         noCanbutton?.translatesAutoresizingMaskIntoConstraints = false
         let leadingConstrants = NSLayoutConstraint.init(item: noCanbutton!, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 50)
         let trealingConstrants = NSLayoutConstraint.init(item: noCanbutton!, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: -50)
