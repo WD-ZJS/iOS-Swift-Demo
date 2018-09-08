@@ -25,12 +25,12 @@ class WDSegemenViewController: BaseViewController, WDSegemenViewDelegate, WDSege
     }
     
     func titleArrayOfSegmentView() -> Array<String> {
-        return ["前天" , "昨天", "今天", "明天", "后天", "大后天"]
+        return ["前天" , "昨天", "今天", "明天", "后天", "大后天", "前天" , "昨天", "今天", "明天", "后天", "大后天"]
     }
     
     func controllerOfSegementView() -> Array<UIViewController> {
         var array:Array<UIViewController> = Array()
-        for _ in 0...5 {
+        for _ in 0...10 {
             array.append(WDSegmentTestViewController())
         }
         return array

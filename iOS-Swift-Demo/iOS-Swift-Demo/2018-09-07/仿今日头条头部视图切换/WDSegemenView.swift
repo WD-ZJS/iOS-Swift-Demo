@@ -28,13 +28,17 @@ class WDSegemenView: UIView {
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.titleArrayOfSegmentView)))! {
                 titleArray = self.dataSource?.titleArrayOfSegmentView()
             } else {
+                print("标题数量不能为0")
                 titleArray = nil
+                return
             }
             
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.controllerOfSegementView)))! {
                 controllerArray = self.dataSource?.controllerOfSegementView()
             } else {
+                print("控制器数量不能为0")
                 controllerArray = nil
+                return
             }
             
             if titleArray?.count != controllerArray?.count {
@@ -58,7 +62,7 @@ class WDSegemenView: UIView {
         return layout
     }()
 
-    private lazy var headerCollectionView:UIScrollView = {
+    private lazy var headerCollectionView:UICollectionView = {
         let scrollView = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: collectionLayout)
         scrollView.backgroundColor = UIColor.white
         scrollView.dataSource = self
@@ -86,6 +90,7 @@ class WDSegemenView: UIView {
               
         self.addSubview(pageController.view)
         self.addSubview(headerCollectionView);
+        
         headerCollectionView.translatesAutoresizingMaskIntoConstraints = false
         let header_top = NSLayoutConstraint.init(item: headerCollectionView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0)
         let header_leading = NSLayoutConstraint.init(item: headerCollectionView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0)
@@ -128,12 +133,12 @@ extension WDSegemenView:UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return (self.titleArray?.count)!
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell:WDSegmentHeaderCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WDSegmentHeaderCell", for: indexPath) as! WDSegmentHeaderCell
-        cell.titleLabel.text = "今日头条"
+        cell.titleLabel.text = self.titleArray![indexPath.item]
         return cell
     }
 }
