@@ -71,6 +71,9 @@ extension BaseViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let reuserIdentify = "baseCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: reuserIdentify, for: indexPath)
+        
+        cell.textLabel?.text = "\(indexPath.row)"
+        
         return cell
     }
 }

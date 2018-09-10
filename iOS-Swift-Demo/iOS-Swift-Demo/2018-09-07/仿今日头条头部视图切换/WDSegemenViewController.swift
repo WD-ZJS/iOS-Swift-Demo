@@ -21,16 +21,16 @@ class WDSegemenViewController: BaseViewController, WDSegemenViewDelegate, WDSege
     }
     
     func segmentViewClickAtIndex(index: Int) {
-        print(index)
+       
     }
     
     func titleArrayOfSegmentView() -> Array<String> {
-        return ["前天" , "昨天", "今天", "明天", "后天", "大后天", "前天" , "昨天", "今天", "明天", "后天", "大后天"]
+        return ["前天" , "昨天", "今天" , "明天", "后天" , "大后天", "大大后天" , "昨天昨天昨天昨天"]
     }
     
     func controllerOfSegementView() -> Array<UIViewController> {
         var array:Array<UIViewController> = Array()
-        for _ in 0...10 {
+        for _ in 0...7 {
             array.append(WDSegmentTestViewController())
         }
         return array

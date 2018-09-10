@@ -7,22 +7,30 @@
 //
 
 import UIKit
-
-@objc
-public protocol WDSegemenViewDataSource:NSObjectProtocol {
+@objc public protocol WDSegemenViewDataSource:NSObjectProtocol {
     
+    /// 获取标题数组
+    ///
+    /// - Returns: 数组
     func titleArrayOfSegmentView() -> Array<String>
     
+    /// 获取控制器数组
+    ///
+    /// - Returns: 数组
     func controllerOfSegementView() -> Array<UIViewController>
 }
 
-@objc
-public protocol WDSegemenViewDelegate:NSObjectProtocol {
+@objc public protocol WDSegemenViewDelegate:NSObjectProtocol {
     func segmentViewClickAtIndex(index:Int) ->Void
 }
 
-class WDSegemenView: UIView {
-   
+enum WDSegementStyle {
+    case WDSegementStyleDefualt
+    case WDSegementStyleBottomLine
+}
+
+class WDSegemenView: UIView, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    weak var delegete:WDSegemenViewDelegate?
     weak var dataSource:WDSegemenViewDataSource? {
         didSet {
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.titleArrayOfSegmentView)))! {
@@ -32,7 +40,7 @@ class WDSegemenView: UIView {
                 titleArray = nil
                 return
             }
-            
+
             if self.dataSource != nil && (self.dataSource?.responds(to: #selector(WDSegemenViewDataSource.controllerOfSegementView)))! {
                 controllerArray = self.dataSource?.controllerOfSegementView()
             } else {
@@ -48,157 +56,222 @@ class WDSegemenView: UIView {
         }
     }
     
+    
+    /// 当前选中的Item的下标
+    private var selectedIndex:Int = 0
+    /// 标题数组
     private var titleArray:Array<String>?
+    /// 控制器数组
     private var controllerArray:Array<UIViewController>?
-
-    public var delegete:WDSegemenViewDelegate?
     
-    
-    private lazy var collectionLayout:UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout.init()
-        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width/6, height: 45)
-        layout.minimumInteritemSpacing = 10
-        layout.scrollDirection = .horizontal
-        return layout
+    private lazy var scrollView:UIScrollView = {
+       let sr = UIScrollView.init()
+        sr.showsVerticalScrollIndicator = false
+        sr.showsHorizontalScrollIndicator = false
+        sr.isPagingEnabled = true
+        return sr
     }()
 
-    private lazy var headerCollectionView:UICollectionView = {
-        let scrollView = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: collectionLayout)
-        scrollView.backgroundColor = UIColor.white
-        scrollView.dataSource = self
-        scrollView.delegate = self
-        scrollView.register(WDSegmentHeaderCell.classForCoder(), forCellWithReuseIdentifier: "WDSegmentHeaderCell")
-        return scrollView
-    }()
     
+    /// 底部controller的容器
     private lazy var pageController:UIPageViewController = {
         let pageController =  UIPageViewController.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey:10])
-        pageController.delegate = self as? UIPageViewControllerDelegate
-        pageController.dataSource = self as? UIPageViewControllerDataSource
+        pageController.delegate = self
+        pageController.dataSource = self
         return pageController
     }()
     
-    private lazy var indicatorView:UIView = {
-        let view = UIView.init()
-        /// 默认颜色
+    /// 底部分割线
+    private lazy var bottomLine:UIView = {
+       let view = UIView.init()
+        view.backgroundColor = UIColor.lightGray
+        return view
+    }()
+    
+    private lazy var indicator:UIView = {
+       let view = UIView.init()
         view.backgroundColor = UIColor.orange
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-              
-        self.addSubview(pageController.view)
-        self.addSubview(headerCollectionView);
         
-        headerCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        let header_top = NSLayoutConstraint.init(item: headerCollectionView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0)
-        let header_leading = NSLayoutConstraint.init(item: headerCollectionView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0)
-        let header_trealing = NSLayoutConstraint.init(item: headerCollectionView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0)
-        let header_height = NSLayoutConstraint.init(item: headerCollectionView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 45)
-        self.addConstraints([header_top, header_trealing, header_leading, header_height])
-        
-        headerCollectionView.addSubview(indicatorView)
+        setupSubviewsProperties()
+        setupSubViewConstraints()
     }
+    
+    private func setupSubviewsProperties() {
+        addSubview(pageController.view)
+        addSubview(scrollView)
+        addSubview(bottomLine)
+        addSubview(indicator)
+        bringSubview(toFront: indicator)
+    }
+
+    private func setupSubViewConstraints() {
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        let header_top = NSLayoutConstraint.init(item: scrollView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0)
+        let header_leading = NSLayoutConstraint.init(item: scrollView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 15)
+        let header_trealing = NSLayoutConstraint.init(item: scrollView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -15)
+        let header_height = NSLayoutConstraint.init(item: scrollView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 45)
+        addConstraints([header_top, header_trealing, header_leading, header_height])
+        
+        
+        pageController.view.translatesAutoresizingMaskIntoConstraints = false
+        let page_top = NSLayoutConstraint.init(item: pageController.view, attribute: .top, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1, constant: 0)
+        let page_leading = NSLayoutConstraint.init(item: pageController.view, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0)
+        let page_trealing = NSLayoutConstraint.init(item: pageController.view, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0)
+        let page_height = NSLayoutConstraint.init(item: pageController.view, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0)
+        addConstraints([page_top, page_leading, page_trealing, page_height])
+        
+        
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        let line_top = NSLayoutConstraint.init(item: bottomLine, attribute: .top, relatedBy: .equal, toItem: scrollView, attribute: .bottom, multiplier: 1, constant: -1)
+        let line_leading = NSLayoutConstraint.init(item: bottomLine, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0)
+        let line_trealing = NSLayoutConstraint.init(item: bottomLine, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0)
+        let line_height = NSLayoutConstraint.init(item: bottomLine, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant:0.5)
+        addConstraints([line_top, line_leading, line_trealing, line_height])
+    }
+    
+    private var speace:CGFloat = 10
+    
+    private var buttonArray:Array<CGFloat>?
+    
+    private var selectedButton:UIButton?
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+       
+        scrollView.layoutIfNeeded()
+        
+        var x:CGFloat = 10.0
+        
+        for (index, string) in (titleArray?.enumerated())! {
+            let b = UIButton.init(type: .custom)
+            b.setTitle(string, for: .normal)
+            b.setTitleColor(UIColor.lightGray, for: .normal)
+            b.setTitleColor(UIColor.orange, for: .selected)
+            b.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+            b.tag = 10 + index
+            b.addTarget(self, action: #selector(buttonAction(sender:)), for: .touchUpInside)
+            scrollView.addSubview(b)
+            let size:CGSize = (string as NSString).size(withAttributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 15)])
+            b.frame = CGRect(x: x, y: 0, width:size.width , height: scrollView.frame.height)
+            x += size.width + speace
+            if index == 0 {
+                showChildViewController(at: 0)
+            }
+        }
+
+        scrollView.contentSize = CGSize(width: x, height: 0)
+    }
+    
+    
+    @objc func buttonAction(sender:UIButton) {
+        showChildViewController(at: sender.tag-10)
+    }
+    
+    //MARK:-计算按钮间距
+    fileprivate func calculateButtonMargin() {
+        guard let arrTitle = titleArray else {return}
+        var widthTotal:CGFloat = 0
+        for (_,title) in arrTitle.enumerated() {
+            let width = (title as NSString).size(withAttributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 15)]).width
+            widthTotal += width
+        }
+        
+        if (widthTotal+CGFloat(arrTitle.count)*speace) > self.scrollView.frame.width {
+
+            
+        } else {
+            speace = (self.scrollView.frame.width-widthTotal)/CGFloat(arrTitle.count)
+        }
+    }
+    
+    /// 根据index显示控制器
+    ///
+    /// - Parameter index: 下标
+    private func showChildViewController(at index: Int) {
+        
+        if index >= controllerArray!.count || index < 0 {
+            return
+        }
+        
+        let button:UIButton = self.viewWithTag(index + 10) as! UIButton
+        button.isSelected = true
+        selectedButton?.isSelected = !(selectedButton?.isSelected)!
+        selectedButton = button
+        
+        if (delegete != nil) && (delegete?.responds(to: #selector(WDSegemenViewDelegate.segmentViewClickAtIndex(index:))))! {
+            delegete?.segmentViewClickAtIndex(index: index)
+        }
+
+        var currentIndex = 0
+        if let currentVC = pageController.viewControllers?.last,
+            let idx = controllerArray!.index(of: currentVC) {
+            currentIndex = idx
+        }
+        let toVC = controllerArray![index]
+        let direction: UIPageViewControllerNavigationDirection = (currentIndex > index) ? .reverse : .forward
+        pageController.setViewControllers([toVC], direction: direction, animated: true, completion: nil)
+        
+
+        let btnCenterX:CGFloat = (selectedButton?.center.x)!
+        let topScrollWidth:CGFloat = scrollView.frame.width
+        let topScrollConsizeWidth = scrollView.contentSize.width
+        
+        if btnCenterX < topScrollWidth/2 {
+            scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
+        } else if btnCenterX + topScrollWidth/2 < topScrollConsizeWidth {
+            scrollView.setContentOffset(CGPoint.init(x: btnCenterX-topScrollWidth/2, y: 0), animated: true)
+        } else {
+            scrollView.setContentOffset(CGPoint.init(x: topScrollConsizeWidth-topScrollWidth, y: 0), animated: true)
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+           
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-
-// MARK: - UIPageViewControllerDataSource
-extension WDSegemenViewController:UIPageViewControllerDataSource {
+    
+    // MARK: ============ UIPageViewControllerDataSource ============
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if controllerArray!.count == 0 { return nil }
+        guard
+            let index = controllerArray!.index(of: viewController)
+            else { return nil }
+        if index > 0 {
+            return controllerArray![index-1]
+        }
         return nil
     }
-    
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        
+        if controllerArray!.count == 0 { return nil }
+        guard
+            let index = controllerArray!.index(of: viewController)
+            else { return nil }
+        if index < controllerArray!.count - 1 {
+            return controllerArray![index+1]
+        }
         return nil
     }
-}
-
-
-// MARK: - UIPageViewControllerDelegate
-extension WDSegemenViewController:UIPageViewControllerDelegate {
+    
+    // MARK: ============ UIPageViewControllerDelegate ============
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-    }
-}
-
-
-// MARK: - UICollectionViewDataSource
-extension WDSegemenView:UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (self.titleArray?.count)!
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell:WDSegmentHeaderCell = collectionView.dequeueReusableCell(withReuseIdentifier: "WDSegmentHeaderCell", for: indexPath) as! WDSegmentHeaderCell
-        cell.titleLabel.text = self.titleArray![indexPath.item]
-        return cell
-    }
-}
-
-
-// MARK: - UICollectionViewDelegate
-extension WDSegemenView:UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
-}
-
-private class WDSegmentHeaderCell: UICollectionViewCell {
-    
-    lazy var titleLabel:UILabel = {
-        let label = UILabel.init()
-        label.textAlignment = .center
-        label.textColor = UIColor.lightGray
-        label.font = UIFont.systemFont(ofSize: 15)
-        self.contentView.addSubview(label)
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        let top = NSLayoutConstraint.init(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1, constant: 0)
-        let leading = NSLayoutConstraint.init(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: contentView, attribute: .leading, multiplier: 1, constant: 0)
-        let trealing = NSLayoutConstraint.init(item: titleLabel, attribute: .trailing, relatedBy: .equal, toItem: contentView, attribute: .trailing, multiplier: 1, constant: 0)
-        let bottom = NSLayoutConstraint.init(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem:contentView , attribute: .bottom, multiplier: 1, constant: 0)
-        self.addConstraints([top, leading, trealing, bottom])
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        let attributes:UICollectionViewLayoutAttributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        let size:CGSize = getNormalStrSize(str: self.titleLabel.text, attriStr: nil, font: 15, w: self.frame.width, h: self.frame.height)
-        var rect = CGRect.zero
-        rect.size = size
-        rect.size.width += 8
-        rect.size.height += 8
-        attributes.frame = rect
-        return attributes
-    }
-    
-    /**获取字符串尺寸--私有方法*/
-    private func getNormalStrSize(str: String? = nil, attriStr: NSMutableAttributedString? = nil, font: CGFloat, w: CGFloat, h: CGFloat) -> CGSize {
-        if str != nil {
-            let strSize = (str! as NSString).boundingRect(with: CGSize(width: w, height: h), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: font)], context: nil).size
-            return strSize
+        guard
+            let currentVC = pageViewController.viewControllers?.last,
+            let index = controllerArray!.index(of: currentVC)
+            else { return }
+        if completed {
+            showChildViewController(at: index)
         }
-        
-        if attriStr != nil {
-            let strSize = attriStr!.boundingRect(with: CGSize(width: w, height: h), options: .usesLineFragmentOrigin, context: nil).size
-            return strSize
-        }
-        return CGSize.zero
     }
 }
+
