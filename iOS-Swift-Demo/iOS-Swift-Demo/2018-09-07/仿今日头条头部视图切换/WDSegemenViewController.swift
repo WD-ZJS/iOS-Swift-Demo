@@ -30,9 +30,10 @@ class WDSegemenViewController: BaseViewController, WDSegemenViewDelegate, WDSege
     
     func controllerOfSegementView() -> Array<UIViewController> {
         var array:Array<UIViewController> = Array()
-        for _ in 0...10 {
+        for _ in 0...11{
             array.append(WDSegmentTestViewController())
         }
+        print(array.count)
         return array
     }
 }
